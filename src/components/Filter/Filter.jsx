@@ -1,5 +1,4 @@
 import { useDispatch, useSelector } from 'react-redux';
-// import { getFilter, filterContacts } from 'redux/contactsSlice';
 import { getFilter } from 'redux/contactsReducer';
 import * as contactsReducer from 'redux/contactsReducer';
 import {

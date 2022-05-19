@@ -3,24 +3,36 @@ import * as API from 'services/contacts-api';
 
 export const fetchContacts = createAsyncThunk(
   'contacts/fetchContacts',
-  async () => {
-    const contacts = await API.fetchContacts();
-    return contacts;
+  async (_, { rejectWithValue }) => {
+    try {
+      const contacts = await API.fetchContacts();
+      return contacts;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
   }
 );
 
 export const addUniqeContact = createAsyncThunk(
   'contacts/addContact',
-  async values => {
-    const contacts = await API.addContact(values);
-    return contacts;
+  async (values, { rejectWithValue }) => {
+    try {
+      const contacts = await API.addContact(values);
+      return contacts;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
   }
 );
 
 export const deleteContact = createAsyncThunk(
   'contacts/deleteContact',
-  async id => {
-    const contacts = await API.deleteContact(id);
-    return contacts;
+  async (id, { rejectWithValue }) => {
+    try {
+      const contacts = await API.deleteContact(id);
+      return contacts;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
   }
 );
