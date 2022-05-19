@@ -7,12 +7,12 @@ export const fetchContacts = async () => {
   return data;
 };
 
-export const addContact = async () => {
-  const { data } = await axios.post(`/contacts`);
+export const addContact = async values => {
+  const { data } = await axios.post('/contacts', values);
   return data;
 };
 
 export const deleteContact = async id => {
-  const { data } = await axios.delete(`/contacts/:${id}`);
+  const { data } = await axios.delete(`/contacts/${id}`);
   return data;
 };

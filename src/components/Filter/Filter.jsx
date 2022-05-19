@@ -1,5 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { getFilter, filterContacts } from 'redux/contactsSlice';
+// import { getFilter, filterContacts } from 'redux/contactsSlice';
+import { getFilter } from 'redux/contactsReducer';
+import * as contactsReducer from 'redux/contactsReducer';
 import {
   FilterContainer,
   FilterLabel,
@@ -11,7 +13,7 @@ export const Filter = () => {
   const dispatch = useDispatch();
 
   const changeFilter = evt => {
-    dispatch(filterContacts(evt.currentTarget.value));
+    dispatch(contactsReducer.onChangeFilter(evt.currentTarget.value));
   };
 
   return (

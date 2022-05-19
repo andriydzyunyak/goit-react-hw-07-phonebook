@@ -1,6 +1,9 @@
 import { Formik } from 'formik';
 import * as yup from 'yup';
-import { useAddContacts } from 'redux/contactsSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { getContacts } from 'redux/contactsReducer';
+// import { useAddContacts } from 'redux/contactsSlice';
+import * as contactsOperations from 'redux/contactsOperations';
 import {
   InputForm,
   LabelName,
@@ -11,19 +14,34 @@ import {
 
 const initialState = {
   name: '',
-  number: '',
+  phone: '',
 };
 
 const schema = yup.object().shape({
   name: yup.string().required(),
-  number: yup.string().required(),
+  phone: yup.string().required(),
 });
 
 export const ContactForm = () => {
-  const { contact } = useAddContacts();
+  // const { contact } = useAddContacts();
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
+
+  const addContact = values => {
+    const nameNormalized = values.name.toLowerCase();
+    const uniqueName = contacts.find(
+      contact => contact.name.toLowerCase() === nameNormalized
+    );
+
+    if (uniqueName) {
+      alert(`${values.name} is already in contacts`);
+    } else {
+      dispatch(contactsOperations.addUniqeContact(values));
+    }
+  };
 
   const handleSubmit = (values, { resetForm }) => {
-    contact(values);
+    addContact(values);
     resetForm();
   };
 
@@ -43,15 +61,15 @@ export const ContactForm = () => {
           required
         />
         <ErrorText name="name" component="div" />
-        <LabelName htmlFor="number">Number</LabelName>
+        <LabelName htmlFor="phone">Number</LabelName>
         <InputForm
           type="tel"
-          name="number"
+          name="phone"
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           required
         />
-        <ErrorText name="number" component="div" />
+        <ErrorText name="phone" component="div" />
         <SubmitButton type="submit">Add contact</SubmitButton>
       </PhonebookForm>
     </Formik>

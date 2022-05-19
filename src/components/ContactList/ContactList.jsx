@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 // import { getFilter } from 'redux/contactsSlice';
-import { deleteContacts, getContacts } from 'redux/contactsSlice';
+import { getContacts, getFilter } from 'redux/contactsReducer';
+// import { deleteContacts } from 'redux/contactsSlice';
 import { useEffect } from 'react';
 import * as contactsOperations from 'redux/contactsOperations';
 import { ContactItem } from 'components/ContactItem/ContactItem';
@@ -14,28 +15,33 @@ export const ContactList = () => {
     dispatch(contactsOperations.fetchContacts());
   }, [dispatch]);
 
-  // const filter = useSelector(getFilter);
-  const contacts = useSelector(getContacts);
+  const filter = useSelector(getFilter);
+  const items = useSelector(getContacts);
 
-  // const filteredContacts = () => {
-  //   const filterNormalized = filter.toLowerCase();
-  //   return contacts.filter(contact =>
-  //     contact.name.toLowerCase().includes(filterNormalized)
-  //   );
-  // };
+  const filteredContacts = () => {
+    const filterNormalized = filter.toLowerCase();
+    return items.filter(contact =>
+      contact.name.toLowerCase().includes(filterNormalized)
+    );
+  };
 
-  // const contactsList = filteredContacts();
+  const contactsList = filteredContacts();
+
+  const deleteItem = async id => {
+    await dispatch(contactsOperations.deleteContact(id));
+    dispatch(contactsOperations.fetchContacts());
+  };
 
   return (
     <>
       <Filter />
       <ContactBook>
-        {contacts.map(({ id, name, phone }) => (
+        {contactsList.map(({ id, name, phone }) => (
           <ContactItem
             key={id}
             name={name}
-            number={phone}
-            onDelete={() => dispatch(deleteContacts(id))}
+            phone={phone}
+            onDelete={() => deleteItem(id)}
           />
         ))}
       </ContactBook>
